@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sentence Analyzer</title>
+  </head>
+  <body>
+    <h1>Sentence Analyzer</h1>
+    <p>Enter a sentence ending with a period (.) one character at a time:</p>
+    <input
+      type="text"
+      id="charInput"
+      maxlength="1"
+      placeholder="Enter character"
+    />
+    <button onclick="processCharacter()">Add Character</button>
+    <button onclick="finishSentence()">Finish Sentence</button>
+    <p id="output"></p>
+
+    <script>
+      // Initialize counters and variables
+      let length = 0;
+      let wordCount = 0;
+      let vowelCount = 0;
+      let inWord = false;
+      let vowels = "aeiouAEIOU";
+      let sentence = "";
+
+      function processCharacter() {
+        const charInput = document.getElementById("charInput").value;
+
+        // Validate input
+        if (charInput.length !== 1) {
+          alert("Please enter a single character.");
+          return;
+        }
+
+        // Add character to the sentence
+        sentence += charInput;
+        length++;
+
+        // Check if character is a vowel
+        if (vowels.includes(charInput)) {
+          vowelCount++;
+        }
+
+        // Check if it's a space
+        if (charInput === " ") {
+          if (inWord) {
+            wordCount++;
+            inWord = false;
+          }
+        } else if (charInput === ".") {
+          // End of sentence
+          if (inWord) {
+            wordCount++;
+          }
+          alert("Sentence complete!");
+          displayResults();
+        } else {
+          // Any other character marks we're inside a word
+          inWord = true;
+        }
+
+        // Clear the input field
+        document.getElementById("charInput").value = "";
+      }
+
+      function finishSentence() {
+        if (inWord) {
+          wordCount++;
+        }
+        displayResults();
+      }
+
+      function displayResults() {
+        const output = document.getElementById("output");
+        output.innerHTML = `
+        <p>Length of the sentence: ${length}</p>
+        <p>Number of words: ${wordCount}</p>
+        <p>Number of vowels: ${vowelCount}</p>
+      `;
+        reset();
+      }
+
+      function reset() {
+        length = 0;
+        wordCount = 0;
+        vowelCount = 0;
+        inWord = false;
+        sentence = "";
+      }
+    </script>
+  </body>
+</html>
